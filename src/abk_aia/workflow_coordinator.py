@@ -64,9 +64,7 @@ class WorkflowCoordinator:
 
         # Check if issue is in ToDo status
         if issue.project_status != WorkflowStatus.TODO:
-            return GitOperation(
-                success=False, message=f"Issue {issue_number} is not in ToDo status"
-            )
+            return GitOperation(success=False, message=f"Issue {issue_number} is not in ToDo status")
 
         # Move to Doing status
         result = coder_manager.update_issue_status(issue, WorkflowStatus.DOING)
@@ -84,15 +82,9 @@ class WorkflowCoordinator:
             return result
 
         branch_name = result.output
-        self.logger.info(
-            f"Started coder workflow for issue {issue_number} on branch {branch_name}"
-        )
+        self.logger.info(f"Started coder workflow for issue {issue_number} on branch {branch_name}")
 
-        return GitOperation(
-            success=True,
-            message=f"Started coder workflow for issue {issue_number}",
-            output=branch_name,
-        )
+        return GitOperation(success=True, message=f"Started coder workflow for issue {issue_number}", output=branch_name)
 
     @abk_common.function_trace
     def complete_coder_workflow(self, issue_number: int) -> GitOperation:
@@ -113,9 +105,7 @@ class WorkflowCoordinator:
 
         # Check if assigned to ai-coder
         if issue.get_assigned_ai() != AiaType.AI_CODER.value:
-            return GitOperation(
-                success=False, message=f"Issue {issue_number} is not assigned to ai-coder"
-            )
+            return GitOperation(success=False, message=f"Issue {issue_number} is not assigned to ai-coder")
 
         # Move to Review status
         result = coder_manager.update_issue_status(issue, WorkflowStatus.REVIEW)
@@ -127,13 +117,9 @@ class WorkflowCoordinator:
         if not result.success:
             return result
 
-        self.logger.info(
-            f"Completed coder workflow for issue {issue_number}, assigned to reviewer"
-        )
+        self.logger.info(f"Completed coder workflow for issue {issue_number}, assigned to reviewer")
 
-        return GitOperation(
-            success=True, message=f"Completed coder workflow for issue {issue_number}"
-        )
+        return GitOperation(success=True, message=f"Completed coder workflow for issue {issue_number}")
 
     @abk_common.function_trace
     def complete_reviewer_workflow(self, issue_number: int) -> GitOperation:
@@ -154,9 +140,7 @@ class WorkflowCoordinator:
 
         # Check if assigned to ai-reviewer
         if issue.get_assigned_ai() != AiaType.AI_REVIEWER.value:
-            return GitOperation(
-                success=False, message=f"Issue {issue_number} is not assigned to ai-reviewer"
-            )
+            return GitOperation(success=False, message=f"Issue {issue_number} is not assigned to ai-reviewer")
 
         # Move to Testing status
         result = reviewer_manager.update_issue_status(issue, WorkflowStatus.TESTING)
@@ -168,18 +152,12 @@ class WorkflowCoordinator:
         if not result.success:
             return result
 
-        self.logger.info(
-            f"Completed reviewer workflow for issue {issue_number}, assigned to tester"
-        )
+        self.logger.info(f"Completed reviewer workflow for issue {issue_number}, assigned to tester")
 
-        return GitOperation(
-            success=True, message=f"Completed reviewer workflow for issue {issue_number}"
-        )
+        return GitOperation(success=True, message=f"Completed reviewer workflow for issue {issue_number}")
 
     @abk_common.function_trace
-    def complete_tester_workflow(
-        self, issue_number: int, pr_title: str, pr_body: str
-    ) -> GitOperation:
+    def complete_tester_workflow(self, issue_number: int, pr_title: str, pr_body: str) -> GitOperation:
         """Complete ai-tester workflow: Testing → Done, create PR, unassign AI.
 
         Args:
@@ -199,17 +177,13 @@ class WorkflowCoordinator:
 
         # Check if assigned to ai-tester
         if issue.get_assigned_ai() != AiaType.AI_TESTER.value:
-            return GitOperation(
-                success=False, message=f"Issue {issue_number} is not assigned to ai-tester"
-            )
+            return GitOperation(success=False, message=f"Issue {issue_number} is not assigned to ai-tester")
 
         # Generate branch name for PR
         branch_name = tester_manager.generate_branch_name(issue)
 
         # Create PR
-        result = tester_manager.create_pr(
-            pr_title, pr_body, branch_name, self.config.default_base_branch
-        )
+        result = tester_manager.create_pr(pr_title, pr_body, branch_name, self.config.default_base_branch)
         if not result.success:
             return result
 
@@ -219,23 +193,16 @@ class WorkflowCoordinator:
             return result
 
         # Remove AI assignment (ready for human review)
-        result = tester_manager.remove_label_from_issue(
-            issue, f"assigned:{AiaType.AI_TESTER.value}"
-        )
+        result = tester_manager.remove_label_from_issue(issue, f"assigned:{AiaType.AI_TESTER.value}")
         if not result.success:
             return result
 
         self.logger.info(f"Completed tester workflow for issue {issue_number}, PR created")
 
-        return GitOperation(
-            success=True,
-            message=f"Completed tester workflow for issue {issue_number}, PR created",
-        )
+        return GitOperation(success=True, message=f"Completed tester workflow for issue {issue_number}, PR created")
 
     @abk_common.function_trace
-    def get_issues_for_ai(
-        self, ai_type: AiaType, status: WorkflowStatus | None = None
-    ) -> list[Issue]:
+    def get_issues_for_ai(self, ai_type: AiaType, status: WorkflowStatus | None = None) -> list[Issue]:
         """Get issues assigned to specific AI type, optionally filtered by status.
 
         Args:
@@ -311,9 +278,7 @@ class WorkflowCoordinator:
 
         self.logger.info(f"Assigned ai-researcher to issue {issue_number}")
 
-        return GitOperation(
-            success=True, message=f"Assigned ai-researcher to issue {issue_number}"
-        )
+        return GitOperation(success=True, message=f"Assigned ai-researcher to issue {issue_number}")
 
     @abk_common.function_trace
     def complete_research_workflow(self, issue_number: int) -> GitOperation:
@@ -334,19 +299,13 @@ class WorkflowCoordinator:
 
         # Check if assigned to ai-researcher
         if issue.get_assigned_ai() != AiaType.AI_RESEARCHER.value:
-            return GitOperation(
-                success=False, message=f"Issue {issue_number} is not assigned to ai-researcher"
-            )
+            return GitOperation(success=False, message=f"Issue {issue_number} is not assigned to ai-researcher")
 
         # Remove researcher assignment
-        result = researcher_manager.remove_label_from_issue(
-            issue, f"assigned:{AiaType.AI_RESEARCHER.value}"
-        )
+        result = researcher_manager.remove_label_from_issue(issue, f"assigned:{AiaType.AI_RESEARCHER.value}")
         if not result.success:
             return result
 
         self.logger.info(f"Completed research workflow for issue {issue_number}")
 
-        return GitOperation(
-            success=True, message=f"Completed research workflow for issue {issue_number}"
-        )
+        return GitOperation(success=True, message=f"Completed research workflow for issue {issue_number}")

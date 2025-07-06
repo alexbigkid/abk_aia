@@ -259,64 +259,33 @@ class GitHubAiaManager(AiaManagerBase):
                 ]
 
                 result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-                return GitOperation(
-                    success=True,
-                    message=f"Updated issue {issue.number} status to {new_status.value}",
-                )
+                return GitOperation(success=True, message=f"Updated issue {issue.number} status to {new_status.value}")
             else:
                 return GitOperation(success=False, message="No project number configured")
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error updating issue status: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error updating issue status: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def add_label_to_issue(self, issue: Issue, label: str) -> GitOperation:
         """Add label to GitHub issue."""
         try:
-            cmd = [
-                "gh",
-                "issue",
-                "edit",
-                str(issue.number),
-                "--repo",
-                self.config.repo_full_name,
-                "--add-label",
-                label,
-            ]
+            cmd = ["gh", "issue", "edit", str(issue.number), "--repo", self.config.repo_full_name, "--add-label", label]
 
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            return GitOperation(
-                success=True, message=f"Added label '{label}' to issue {issue.number}"
-            )
+            return GitOperation(success=True, message=f"Added label '{label}' to issue {issue.number}")
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error adding label: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error adding label: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def remove_label_from_issue(self, issue: Issue, label: str) -> GitOperation:
         """Remove label from GitHub issue."""
         try:
-            cmd = [
-                "gh",
-                "issue",
-                "edit",
-                str(issue.number),
-                "--repo",
-                self.config.repo_full_name,
-                "--remove-label",
-                label,
-            ]
+            cmd = ["gh", "issue", "edit", str(issue.number), "--repo", self.config.repo_full_name, "--remove-label", label]
 
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            return GitOperation(
-                success=True, message=f"Removed label '{label}' from issue {issue.number}"
-            )
+            return GitOperation(success=True, message=f"Removed label '{label}' from issue {issue.number}")
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error removing label: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error removing label: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def create_branch(self, issue: Issue) -> GitOperation:
@@ -328,15 +297,9 @@ class GitHubAiaManager(AiaManagerBase):
             cmd = ["git", "checkout", "-b", branch_name]
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-            return GitOperation(
-                success=True,
-                message=f"Created branch '{branch_name}' for issue {issue.number}",
-                output=branch_name,
-            )
+            return GitOperation(success=True, message=f"Created branch '{branch_name}' for issue {issue.number}", output=branch_name)
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error creating branch: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error creating branch: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def create_commit(self, branch: str, files: list[str], message: str) -> GitOperation:
@@ -351,13 +314,9 @@ class GitHubAiaManager(AiaManagerBase):
             cmd = ["git", "commit", "-m", message]
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-            return GitOperation(
-                success=True, message=f"Created commit on branch '{branch}'", output=result.stdout
-            )
+            return GitOperation(success=True, message=f"Created commit on branch '{branch}'", output=result.stdout)
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error creating commit: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error creating commit: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def push_commit(self, branch: str, files: list[str], message: str) -> GitOperation:
@@ -367,13 +326,9 @@ class GitHubAiaManager(AiaManagerBase):
             cmd = ["git", "push", "origin", branch]
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-            return GitOperation(
-                success=True, message=f"Pushed branch '{branch}' to remote", output=result.stdout
-            )
+            return GitOperation(success=True, message=f"Pushed branch '{branch}' to remote", output=result.stdout)
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error pushing branch: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error pushing branch: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def create_pr(self, title: str, body: str, head: str, base: str) -> GitOperation:
@@ -397,13 +352,9 @@ class GitHubAiaManager(AiaManagerBase):
 
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-            return GitOperation(
-                success=True, message=f"Created PR: {title}", output=result.stdout
-            )
+            return GitOperation(success=True, message=f"Created PR: {title}", output=result.stdout)
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error creating PR: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error creating PR: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def comment_on_pr(self, repo: str, pr_number: int, message: str) -> GitOperation:
@@ -415,9 +366,7 @@ class GitHubAiaManager(AiaManagerBase):
 
             return GitOperation(success=True, message=f"Added comment to PR #{pr_number}")
         except subprocess.CalledProcessError as e:
-            return GitOperation(
-                success=False, message=f"Error commenting on PR: {e.stderr}", error=e.stderr
-            )
+            return GitOperation(success=False, message=f"Error commenting on PR: {e.stderr}", error=e.stderr)
 
     @abk_common.function_trace
     def assign_to_ai(self, issue: Issue, ai_type: AiaType) -> GitOperation:
@@ -583,9 +532,7 @@ class AiaManagerFactory:
     """
 
     @staticmethod
-    def create_manager(
-        provider: str, aia_type: AiaType, config: WorkflowConfig
-    ) -> AiaManagerBase:
+    def create_manager(provider: str, aia_type: AiaType, config: WorkflowConfig) -> AiaManagerBase:
         """Create manager for specified Git provider.
 
         Args:

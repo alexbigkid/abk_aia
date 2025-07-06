@@ -54,7 +54,7 @@ skip_covered = true
 
 
 [tool.ruff]
-line-length = 98
+line-length = 140
 indent-width = 4
 src = ["src", "tests"]
 

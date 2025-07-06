@@ -8,9 +8,7 @@ from abk_aia.git_aia_manager import AiaType
 
 def setup_logging():
     """Setup logging for the example."""
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
 def main():

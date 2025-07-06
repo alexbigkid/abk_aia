@@ -39,9 +39,7 @@ def main() -> None:
     print()
     print("Key features:")
     print("- Automated kanban workflow (ToDo → Doing → Review → Testing → Done)")
-    print(
-        "- AI assistant coordination (ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer)"
-    )
+    print("- AI assistant coordination (ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer)")
     print("- Standardized branch naming ([B|D|F|R|T] + / + issue number + / + short name)")
     print("- GitHub CLI integration for seamless operations")
     print()
