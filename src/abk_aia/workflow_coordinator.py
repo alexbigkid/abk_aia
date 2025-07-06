@@ -1,4 +1,8 @@
-"""Workflow coordinator for AI assistant collaboration."""
+"""Workflow coordinator for AI assistant collaboration.
+
+Orchestrates the AI assistant workflow, managing transitions between
+different AI types and workflow states in the kanban process.
+"""
 
 import logging
 
@@ -8,10 +12,18 @@ from abk_aia import abk_common
 
 
 class WorkflowCoordinator:
-    """Coordinates workflow between different AI assistants."""
+    """Coordinates workflow between different AI assistants.
+    
+    Manages the complete AI assistant workflow from issue assignment
+    through code implementation, review, testing, and PR creation.
+    
+    Args:
+        provider: Git provider name ("github", "gitlab", "bitbucket")
+        config: Workflow configuration with repository settings
+    """
 
     def __init__(self, provider: str, config: WorkflowConfig):
-        """Initialize workflow coordinator."""
+        """Initialize workflow coordinator with managers for all AI types."""
         self.provider = provider
         self.config = config
         self.logger = logging.getLogger(__name__)
@@ -23,12 +35,26 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def get_manager(self, ai_type: AiaType) -> AiaManagerBase:
-        """Get manager for specific AI type."""
+        """Get manager for specific AI type.
+        
+        Args:
+            ai_type: AI assistant type
+            
+        Returns:
+            Manager instance for the AI type
+        """
         return self.managers[ai_type]
 
     @abk_common.function_trace
     def start_coder_workflow(self, issue_number: int) -> GitOperation:
-        """Start the ai-coder workflow for an issue."""
+        """Start ai-coder workflow: ToDo → Doing, assign to ai-coder, create branch.
+        
+        Args:
+            issue_number: Issue number to start workflow for
+            
+        Returns:
+            GitOperation with branch name in output if successful
+        """
         coder_manager = self.get_manager(AiaType.AI_CODER)
 
         # Get the issue
@@ -70,7 +96,14 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def complete_coder_workflow(self, issue_number: int) -> GitOperation:
-        """Complete the ai-coder workflow and transition to reviewer."""
+        """Complete ai-coder workflow: Doing → Review, assign to ai-reviewer.
+        
+        Args:
+            issue_number: Issue number to complete workflow for
+            
+        Returns:
+            GitOperation with success/failure details
+        """
         coder_manager = self.get_manager(AiaType.AI_CODER)
 
         # Get the issue
@@ -104,7 +137,14 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def complete_reviewer_workflow(self, issue_number: int) -> GitOperation:
-        """Complete the ai-reviewer workflow and transition to tester."""
+        """Complete ai-reviewer workflow: Review → Testing, assign to ai-tester.
+        
+        Args:
+            issue_number: Issue number to complete workflow for
+            
+        Returns:
+            GitOperation with success/failure details
+        """
         reviewer_manager = self.get_manager(AiaType.AI_REVIEWER)
 
         # Get the issue
@@ -140,7 +180,16 @@ class WorkflowCoordinator:
     def complete_tester_workflow(
         self, issue_number: int, pr_title: str, pr_body: str
     ) -> GitOperation:
-        """Complete the ai-tester workflow and create PR."""
+        """Complete ai-tester workflow: Testing → Done, create PR, unassign AI.
+        
+        Args:
+            issue_number: Issue number to complete workflow for
+            pr_title: Pull request title
+            pr_body: Pull request body
+            
+        Returns:
+            GitOperation with success/failure details
+        """
         tester_manager = self.get_manager(AiaType.AI_TESTER)
 
         # Get the issue
@@ -187,7 +236,15 @@ class WorkflowCoordinator:
     def get_issues_for_ai(
         self, ai_type: AiaType, status: WorkflowStatus | None = None
     ) -> list[Issue]:
-        """Get issues assigned to specific AI type."""
+        """Get issues assigned to specific AI type, optionally filtered by status.
+        
+        Args:
+            ai_type: AI assistant type
+            status: Optional workflow status filter
+            
+        Returns:
+            List of issues assigned to the AI type
+        """
         manager = self.get_manager(ai_type)
 
         if status:
@@ -201,7 +258,11 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def get_todo_issues(self) -> list[Issue]:
-        """Get issues in ToDo status ready for ai-coder."""
+        """Get unassigned issues in ToDo status ready for ai-coder.
+        
+        Returns:
+            List of issues in ToDo status not assigned to any AI
+        """
         coder_manager = self.get_manager(AiaType.AI_CODER)
         todo_issues = coder_manager.get_issues(WorkflowStatus.TODO)
 
@@ -210,7 +271,11 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def get_workflow_status(self) -> dict[WorkflowStatus, int]:
-        """Get count of issues by workflow status."""
+        """Get count of issues by workflow status.
+        
+        Returns:
+            Dictionary mapping workflow status to issue count
+        """
         coder_manager = self.get_manager(AiaType.AI_CODER)
         all_issues = coder_manager.get_issues()
 
@@ -224,7 +289,14 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def assign_researcher_to_issue(self, issue_number: int) -> GitOperation:
-        """Assign ai-researcher to an issue for research phase."""
+        """Assign ai-researcher to an issue for research phase.
+        
+        Args:
+            issue_number: Issue number to assign researcher to
+            
+        Returns:
+            GitOperation with success/failure details
+        """
         researcher_manager = self.get_manager(AiaType.AI_RESEARCHER)
 
         # Get the issue
@@ -245,7 +317,14 @@ class WorkflowCoordinator:
 
     @abk_common.function_trace
     def complete_research_workflow(self, issue_number: int) -> GitOperation:
-        """Complete research workflow and prepare for coder."""
+        """Complete research workflow and unassign ai-researcher.
+        
+        Args:
+            issue_number: Issue number to complete research for
+            
+        Returns:
+            GitOperation with success/failure details
+        """
         researcher_manager = self.get_manager(AiaType.AI_RESEARCHER)
 
         # Get the issue

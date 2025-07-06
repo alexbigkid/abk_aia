@@ -1,4 +1,8 @@
-"""Implements git AI assistant manager."""
+"""Git AI assistant manager implementation.
+
+Provides AI assistant workflow management across different Git providers.
+Implements Strategy pattern for extensible provider support.
+"""
 
 # Standard lib imports
 from abc import ABCMeta, abstractmethod
@@ -22,7 +26,10 @@ from abk_aia.models import Issue, WorkflowConfig, GitOperation, WorkflowStatus
 # Git Branch Type
 # -----------------------------------------------------------------------------
 class GitBranchType(Enum):
-    """Git branch type."""
+    """Git branch type enumeration.
+    
+    Defines branch prefixes: B/ (bug), D/ (docs), F/ (feature), R/ (research), T/ (test).
+    """
 
     BUG = "B"
     DOCUMENTATION = "D"
@@ -35,7 +42,10 @@ class GitBranchType(Enum):
 # AI assistant type
 # -----------------------------------------------------------------------------
 class AiaType(Enum):
-    """AI assistant type."""
+    """AI assistant type enumeration.
+    
+    Defines available AI assistant types in the workflow.
+    """
 
     AI_CODER = "ai-coder"
     AI_MARKETEER = "ai-marketeer"
@@ -48,22 +58,41 @@ class AiaType(Enum):
 # git AI assistant manager base
 # -----------------------------------------------------------------------------
 class AiaManagerBase(metaclass=ABCMeta):
-    """GitAiaManagerBase abstract class."""
+    """Abstract base class for AI assistant managers.
+    
+    Args:
+        aia_type: AI assistant type
+        config: Workflow configuration
+    """
 
     def __init__(self, aia_type: AiaType, config: WorkflowConfig) -> None:
-        """Init for the GitAiaManagerBase"""
+        """Initialize the AI assistant manager."""
         self.aia_type = aia_type
         self.config = config
 
     def generate_branch_name(self, issue: Issue) -> str:
-        """Generate branch name based on GitBranchType and issue details."""
+        """Generate standardized branch name: {prefix}/{issue_number}/{short_name}.
+        
+        Args:
+            issue: Issue object containing labels and metadata
+            
+        Returns:
+            Formatted branch name (e.g., "F/123/add-user-auth")
+        """
         # Determine branch type based on issue labels
         branch_type = self._get_branch_type_from_labels(issue.labels)
         short_name = issue.get_short_name()
         return f"{branch_type.value}/{issue.number}/{short_name}"
 
     def _get_branch_type_from_labels(self, labels: list[str]) -> GitBranchType:
-        """Determine branch type based on issue labels."""
+        """Determine branch type from issue labels using set intersection.
+        
+        Args:
+            labels: List of issue labels
+            
+        Returns:
+            Branch type, defaults to FEATURE if no type labels found
+        """
         type_labels = {"bug", "documentation", "feature", "research", "test"}
         labels_set = set(labels)
 
@@ -153,7 +182,11 @@ class AiaManagerBase(metaclass=ABCMeta):
 # GitHub AI assistant Manager
 # -----------------------------------------------------------------------------
 class GitHubAiaManager(AiaManagerBase):
-    """GitHub AI assistant Manager class. Inherited from AiaManagerBase."""
+    """GitHub AI assistant manager implementation.
+    
+    Uses GitHub CLI (gh) for all GitHub operations.
+    Requires: gh CLI installed and authenticated.
+    """
 
     @abk_common.function_trace
     def get_issues(self, status: WorkflowStatus | None = None) -> list[Issue]:
@@ -434,7 +467,7 @@ class GitHubAiaManager(AiaManagerBase):
 # GitLab AI assistant Manager
 # -----------------------------------------------------------------------------
 class GitLabAiaManager(AiaManagerBase):
-    """GitLab AI assistant Manager class. Inherited from AiaManagerBase."""
+    """GitLab AI assistant manager (placeholder implementation)."""
 
     def get_issues(self, status: WorkflowStatus | None = None) -> list[Issue]:
         """GitLab implementation - not implemented yet."""
@@ -489,7 +522,7 @@ class GitLabAiaManager(AiaManagerBase):
 # Bitbucket AI assistant Manager
 # -----------------------------------------------------------------------------
 class BitbucketAiaManager(AiaManagerBase):
-    """Bitbucket AI assistant Manager class. Inherited from AiaManagerBase."""
+    """Bitbucket AI assistant manager (placeholder implementation)."""
 
     def get_issues(self, status: WorkflowStatus | None = None) -> list[Issue]:
         """Bitbucket implementation - not implemented yet."""
@@ -544,13 +577,28 @@ class BitbucketAiaManager(AiaManagerBase):
 # Manager Factory
 # -----------------------------------------------------------------------------
 class AiaManagerFactory:
-    """Factory class for creating AI assistant managers."""
+    """Factory for creating AI assistant managers.
+    
+    Supports: "github", "gitlab", "bitbucket"
+    """
 
     @staticmethod
     def create_manager(
         provider: str, aia_type: AiaType, config: WorkflowConfig
     ) -> AiaManagerBase:
-        """Create appropriate manager based on provider."""
+        """Create manager for specified Git provider.
+        
+        Args:
+            provider: Git provider ("github", "gitlab", "bitbucket")
+            aia_type: AI assistant type
+            config: Workflow configuration
+            
+        Returns:
+            Manager instance for the provider
+            
+        Raises:
+            ValueError: If provider is not supported
+        """
         match provider.lower():
             case "github":
                 return GitHubAiaManager(aia_type, config)
