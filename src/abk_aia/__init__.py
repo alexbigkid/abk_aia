@@ -5,7 +5,7 @@ Supports structured workflows and multi-provider Git integration.
 
 Features:
 - Multi-provider support (GitHub, GitLab, Bitbucket)
-- Standardized branch naming (B/, D/, F/, R/, T/ + issue number + short name)
+- Standardized branch naming ([B|D|F|R|T] + / + issue number + / + short name)
 - AI assistant coordination (ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer)
 - Automated kanban workflow (ToDo → Doing → Review → Testing → Done)
 - GitHub project integration
@@ -42,7 +42,7 @@ def main() -> None:
     print(
         "- AI assistant coordination (ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer)"
     )
-    print("- Standardized branch naming (B/, D/, F/, R/, T/ + issue number + short name)")
+    print("- Standardized branch naming ([B|D|F|R|T] + / + issue number + / + short name)")
     print("- GitHub CLI integration for seamless operations")
     print()
     print("For usage examples, see: examples/usage_example.py")

@@ -17,7 +17,7 @@ Added
 
 - Initial release of ABK AIA (AI Assistant Git Workflow Interface)
 - **Multi-provider support**: GitHub implementation (GitLab and Bitbucket placeholders)
-- **Standardized branch naming**: B/, D/, F/, R/, T/ + issue number + short name convention
+- **Standardized branch naming**: [B|D|F|R|T] + / + issue number + / + short name convention
 - **AI assistant coordination**: Support for ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer
 - **Automated kanban workflow**: ToDo → Doing → Review → Testing → Done state management
 - **GitHub CLI integration**: Complete GitHub operations using gh CLI

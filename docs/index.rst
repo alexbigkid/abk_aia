@@ -17,7 +17,7 @@ Features
 
 ✨ **Multi-provider support** - GitHub, GitLab, Bitbucket
 
-🏷️ **Standardized branch naming** - B/, D/, F/, R/, T/ + issue number + short name
+🏷️ **Standardized branch naming** - [B|D|F|R|T] + / + issue number + / + short name
 
 🤖 **AI assistant coordination** - ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer
 
