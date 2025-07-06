@@ -18,7 +18,7 @@ class IssueState(Enum):
 
 class WorkflowStatus(Enum):
     """Kanban workflow status enumeration.
-    
+
     Defines the workflow states: ToDo → Doing → Review → Testing → Done
     """
 
@@ -40,7 +40,7 @@ class PullRequestState(Enum):
 @dataclass
 class Issue:
     """GitHub issue data model.
-    
+
     Attributes:
         number: Issue number
         title: Issue title
@@ -67,7 +67,7 @@ class Issue:
 
     def get_short_name(self) -> str:
         """Generate short name for branch naming from issue title.
-        
+
         Returns:
             Lowercase, hyphenated name limited to 30 characters
         """
@@ -82,10 +82,10 @@ class Issue:
 
     def has_label(self, label: str) -> bool:
         """Check if issue has a specific label.
-        
+
         Args:
             label: Label string to check for
-            
+
         Returns:
             True if label is present
         """
@@ -93,7 +93,7 @@ class Issue:
 
     def is_assigned_to_ai(self) -> bool:
         """Check if issue is assigned to any AI assistant.
-        
+
         Returns:
             True if issue has any "assigned:ai-*" label
         """
@@ -101,7 +101,7 @@ class Issue:
 
     def get_assigned_ai(self) -> str | None:
         """Get the AI assistant assigned to this issue.
-        
+
         Returns:
             AI assistant type string (e.g., "ai-coder") or None
         """
@@ -114,7 +114,7 @@ class Issue:
 @dataclass
 class PullRequest:
     """GitHub pull request data model.
-    
+
     Attributes:
         number: PR number
         title: PR title
@@ -147,7 +147,7 @@ class PullRequest:
 
     def is_ready_for_review(self) -> bool:
         """Check if PR is ready for review.
-        
+
         Returns:
             True if PR is open and not a draft
         """
@@ -157,7 +157,7 @@ class PullRequest:
 @dataclass
 class WorkflowConfig:
     """Configuration for AI assistant workflow.
-    
+
     Attributes:
         repo_owner: GitHub repository owner
         repo_name: GitHub repository name
@@ -173,7 +173,7 @@ class WorkflowConfig:
     @property
     def repo_full_name(self) -> str:
         """Get full repository name.
-        
+
         Returns:
             Repository name in "owner/repo" format
         """
@@ -183,7 +183,7 @@ class WorkflowConfig:
 @dataclass
 class GitOperation:
     """Git operation result data model.
-    
+
     Attributes:
         success: Whether operation succeeded
         message: Result message

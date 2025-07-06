@@ -15,7 +15,7 @@ Example:
     Basic usage::
 
         from abk_aia import WorkflowCoordinator, WorkflowConfig
-        
+
         config = WorkflowConfig(repo_owner="user", repo_name="repo", project_number=1)
         coordinator = WorkflowCoordinator("github", config)
         result = coordinator.start_coder_workflow(123)
@@ -28,7 +28,7 @@ from abk_aia.models import WorkflowConfig, WorkflowStatus, Issue, GitOperation
 
 def main() -> None:
     """Main entry point for the CLI interface.
-    
+
     Displays package information and available features.
     """
     print("ABK AI Assistant Interface")

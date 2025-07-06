@@ -27,7 +27,7 @@ from abk_aia.models import Issue, WorkflowConfig, GitOperation, WorkflowStatus
 # -----------------------------------------------------------------------------
 class GitBranchType(Enum):
     """Git branch type enumeration.
-    
+
     Defines branch prefixes: B/ (bug), D/ (docs), F/ (feature), R/ (research), T/ (test).
     """
 
@@ -43,7 +43,7 @@ class GitBranchType(Enum):
 # -----------------------------------------------------------------------------
 class AiaType(Enum):
     """AI assistant type enumeration.
-    
+
     Defines available AI assistant types in the workflow.
     """
 
@@ -59,7 +59,7 @@ class AiaType(Enum):
 # -----------------------------------------------------------------------------
 class AiaManagerBase(metaclass=ABCMeta):
     """Abstract base class for AI assistant managers.
-    
+
     Args:
         aia_type: AI assistant type
         config: Workflow configuration
@@ -72,10 +72,10 @@ class AiaManagerBase(metaclass=ABCMeta):
 
     def generate_branch_name(self, issue: Issue) -> str:
         """Generate standardized branch name: {prefix}/{issue_number}/{short_name}.
-        
+
         Args:
             issue: Issue object containing labels and metadata
-            
+
         Returns:
             Formatted branch name (e.g., "F/123/add-user-auth")
         """
@@ -86,10 +86,10 @@ class AiaManagerBase(metaclass=ABCMeta):
 
     def _get_branch_type_from_labels(self, labels: list[str]) -> GitBranchType:
         """Determine branch type from issue labels using set intersection.
-        
+
         Args:
             labels: List of issue labels
-            
+
         Returns:
             Branch type, defaults to FEATURE if no type labels found
         """
@@ -183,7 +183,7 @@ class AiaManagerBase(metaclass=ABCMeta):
 # -----------------------------------------------------------------------------
 class GitHubAiaManager(AiaManagerBase):
     """GitHub AI assistant manager implementation.
-    
+
     Uses GitHub CLI (gh) for all GitHub operations.
     Requires: gh CLI installed and authenticated.
     """
@@ -578,7 +578,7 @@ class BitbucketAiaManager(AiaManagerBase):
 # -----------------------------------------------------------------------------
 class AiaManagerFactory:
     """Factory for creating AI assistant managers.
-    
+
     Supports: "github", "gitlab", "bitbucket"
     """
 
@@ -587,15 +587,15 @@ class AiaManagerFactory:
         provider: str, aia_type: AiaType, config: WorkflowConfig
     ) -> AiaManagerBase:
         """Create manager for specified Git provider.
-        
+
         Args:
             provider: Git provider ("github", "gitlab", "bitbucket")
             aia_type: AI assistant type
             config: Workflow configuration
-            
+
         Returns:
             Manager instance for the provider
-            
+
         Raises:
             ValueError: If provider is not supported
         """
