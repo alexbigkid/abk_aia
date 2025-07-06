@@ -25,7 +25,7 @@ class GitBranchType(Enum):
     """Git branch type."""
 
     BUG = "B"
-    DOCUMENT = "D"
+    DOCUMENTATION = "D"
     FEATURE = "F"
     RESEARCH = "R"
     TEST = "T"
@@ -64,19 +64,29 @@ class AiaManagerBase(metaclass=ABCMeta):
 
     def _get_branch_type_from_labels(self, labels: list[str]) -> GitBranchType:
         """Determine branch type based on issue labels."""
-        if "bug" in labels:
-            return GitBranchType.BUG
-        elif "documentation" in labels:
-            return GitBranchType.DOCUMENT
-        elif "feature" in labels:
-            return GitBranchType.FEATURE
-        elif "research" in labels:
-            return GitBranchType.RESEARCH
-        elif "test" in labels:
-            return GitBranchType.TEST
-        else:
-            # Default to feature for unlabeled issues
-            return GitBranchType.FEATURE
+        type_labels = {"bug", "documentation", "feature", "research", "test"}
+        labels_set = set(labels)
+
+        # Find intersection - should contain exactly one type label
+        found_types = type_labels.intersection(labels_set)
+
+        if found_types:
+            # Get the single type label (since there should only be one)
+            type_label = found_types.pop()
+            match type_label:
+                case "bug":
+                    return GitBranchType.BUG
+                case "documentation":
+                    return GitBranchType.DOCUMENTATION
+                case "feature":
+                    return GitBranchType.FEATURE
+                case "research":
+                    return GitBranchType.RESEARCH
+                case "test":
+                    return GitBranchType.TEST
+
+        # Default to feature if no type label found
+        return GitBranchType.FEATURE
 
     @abstractmethod
     def get_issues(self, status: WorkflowStatus | None = None) -> list[Issue]:
@@ -541,11 +551,12 @@ class AiaManagerFactory:
         provider: str, aia_type: AiaType, config: WorkflowConfig
     ) -> AiaManagerBase:
         """Create appropriate manager based on provider."""
-        if provider.lower() == "github":
-            return GitHubAiaManager(aia_type, config)
-        elif provider.lower() == "gitlab":
-            return GitLabAiaManager(aia_type, config)
-        elif provider.lower() == "bitbucket":
-            return BitbucketAiaManager(aia_type, config)
-        else:
-            raise ValueError(f"Unsupported Git provider: {provider}")
+        match provider.lower():
+            case "github":
+                return GitHubAiaManager(aia_type, config)
+            case "gitlab":
+                return GitLabAiaManager(aia_type, config)
+            case "bitbucket":
+                return BitbucketAiaManager(aia_type, config)
+            case _:
+                raise ValueError(f"Unsupported Git provider: {provider}")
