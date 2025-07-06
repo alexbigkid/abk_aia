@@ -75,11 +75,11 @@ Branch Naming Convention
 
 The system uses standardized branch naming:
 
-- **B/**: Bug fix branches
-- **D/**: Documentation branches  
-- **F/**: Feature branches
-- **R/**: Research branches
-- **T/**: Test branches
+- **B**: Bug fix branches
+- **D**: Documentation branches
+- **F**: Feature branches
+- **R**: Research branches
+- **T**: Test branches
 
 Format: `{prefix}/{issue_number}/{short_name}`
 

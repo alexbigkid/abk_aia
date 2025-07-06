@@ -55,16 +55,16 @@ This is a standardized AI assistant interface for Git workflow management. The p
 - **ai-coder** - Implements features, fixes bugs, creates documentation
 - **ai-researcher** - Conducts research before implementation
 - **ai-tester** - Creates and runs tests
-- **ai-marketeer** - Market research and promotion strategies  
+- **ai-marketeer** - Market research and promotion strategies
 - **ai-reviewer** - Reviews PRs and provides feedback
 
 ### Branch Naming Convention
 
-- **B/** - Bug fixes (B/{issue_number}/{short-issue-name})
-- **D/** - Documentation (D/{issue_number}/{short-issue-name})
-- **F/** - Features (F/{issue_number}/{short-issue-name})
-- **R/** - Research (R/{issue_number}/{short-issue-name})
-- **T/** - Tests (T/{issue_number}/{short-issue-name})
+- **B** - Bug fixes (B/{issue_number}/{short-issue-name})
+- **D** - Documentation (D/{issue_number}/{short-issue-name})
+- **F** - Features (F/{issue_number}/{short-issue-name})
+- **R** - Research (R/{issue_number}/{short-issue-name})
+- **T** - Tests (T/{issue_number}/{short-issue-name})
 
 ### Workflow States
 

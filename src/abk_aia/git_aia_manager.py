@@ -28,7 +28,7 @@ from abk_aia.models import Issue, WorkflowConfig, GitOperation, WorkflowStatus
 class GitBranchType(Enum):
     """Git branch type enumeration.
 
-    Defines branch prefixes: B/ (bug), D/ (docs), F/ (feature), R/ (research), T/ (test).
+    Defines branch prefixes: B (bug), D (docs), F (feature), R (research), T (test).
     """
 
     BUG = "B"
