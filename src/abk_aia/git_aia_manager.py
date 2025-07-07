@@ -258,7 +258,7 @@ class GitHubAiaManager(AiaManagerBase):
                     str(issue.number),
                 ]
 
-                result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                subprocess.run(cmd, capture_output=True, text=True, check=True)
                 return GitOperation(success=True, message=f"Updated issue {issue.number} status to {new_status.value}")
             else:
                 return GitOperation(success=False, message="No project number configured")
@@ -271,7 +271,7 @@ class GitHubAiaManager(AiaManagerBase):
         try:
             cmd = ["gh", "issue", "edit", str(issue.number), "--repo", self.config.repo_full_name, "--add-label", label]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
             return GitOperation(success=True, message=f"Added label '{label}' to issue {issue.number}")
         except subprocess.CalledProcessError as e:
             return GitOperation(success=False, message=f"Error adding label: {e.stderr}", error=e.stderr)
@@ -282,7 +282,7 @@ class GitHubAiaManager(AiaManagerBase):
         try:
             cmd = ["gh", "issue", "edit", str(issue.number), "--repo", self.config.repo_full_name, "--remove-label", label]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
             return GitOperation(success=True, message=f"Removed label '{label}' from issue {issue.number}")
         except subprocess.CalledProcessError as e:
             return GitOperation(success=False, message=f"Error removing label: {e.stderr}", error=e.stderr)
@@ -295,7 +295,7 @@ class GitHubAiaManager(AiaManagerBase):
 
             # Create and checkout new branch
             cmd = ["git", "checkout", "-b", branch_name]
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
 
             return GitOperation(success=True, message=f"Created branch '{branch_name}' for issue {issue.number}", output=branch_name)
         except subprocess.CalledProcessError as e:
@@ -362,7 +362,7 @@ class GitHubAiaManager(AiaManagerBase):
         try:
             cmd = ["gh", "pr", "comment", str(pr_number), "--repo", repo, "--body", message]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
 
             return GitOperation(success=True, message=f"Added comment to PR #{pr_number}")
         except subprocess.CalledProcessError as e:

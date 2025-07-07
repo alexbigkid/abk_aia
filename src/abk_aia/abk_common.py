@@ -4,9 +4,6 @@
 import logging
 import timeit
 
-# Third party imports
-from colorama import Fore, Style
-
 
 # -----------------------------------------------------------------------------
 # functions
@@ -20,9 +17,9 @@ def function_trace(original_function):
 
     def function_wrapper(*args, **kwargs):
         _logger = logging.getLogger(original_function.__name__)
-        _logger.debug(f"{Fore.YELLOW}-> {original_function.__name__}{Style.RESET_ALL}")
+        _logger.info(f"Entering {original_function.__name__}")
         result = original_function(*args, **kwargs)
-        _logger.debug(f"{Fore.YELLOW}<- {original_function.__name__}{Style.RESET_ALL}\n")
+        _logger.info(f"Exiting {original_function.__name__}")
         return result
 
     return function_wrapper
@@ -31,7 +28,7 @@ def function_trace(original_function):
 class PerformanceTimer:
     """Performance Times class."""
 
-    def __init__(self, timer_name: str, pt_logger: logging.Logger):
+    def __init__(self, timer_name: str, pt_logger: logging.Logger = None):
         """Init for performance timer."""
         self._timer_name = timer_name
         self._logger = pt_logger or logging.getLogger(__name__)

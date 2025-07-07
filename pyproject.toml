@@ -13,6 +13,9 @@ dependencies = [
 dev = [
     "coverage",
     "parameterized",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
     "ruff",
     "sphinx>=8.2.3",
     "sphinx-rtd-theme>=3.0.2",
@@ -40,17 +43,43 @@ sources = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+addopts = [
+    "--cov=abk_aia",
+    "--cov-branch",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=90"
+]
 
 
 
 [tool.coverage.run]
 source = ["abk_aia"]
 branch = true
+omit = [
+    "tests/*",
+    "*/tests/*",
+    "setup.py",
+    "conftest.py"
+]
 
 
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+
+[tool.coverage.html]
+directory = "htmlcov"
 
 
 [tool.ruff]
@@ -84,10 +113,12 @@ extend-ignore = ["D203", "E231", "E202", "S108"]
 
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]  # Allow assert statements
+"tests/*" = ["S101", "S404"]  # Allow assert statements and subprocess import
 "tests/integration/test_integration_real_images.py" = ["S101", "S603", "S607"]  # Allow subprocess calls for tree command in integration tests
 "package_build.py" = ["S607"]  # Allow subprocess with partial executable paths (dpkg-deb, dpkg-scanpackages, gzip, choco)
 ".github/scripts/build.py" = ["S603", "S607"]  # Allow subprocess calls for build scripts (powershell, bash)
+"src/abk_aia/git_aia_manager.py" = ["S404", "S603"]  # Allow subprocess usage for GitHub CLI operations
+"run_tests.py" = ["S404", "S602"]  # Allow subprocess usage for test runner script
 
 
 [tool.ruff.lint.pydocstyle]

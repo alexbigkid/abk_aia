@@ -20,12 +20,21 @@ pip install -e .[dev]
 ### Code Quality and Testing
 ```bash
 # Run code formatting and linting
-ruff check
-ruff format
+uv run ruff check
+uv run ruff format
 
-# Run tests with coverage
-coverage run -m pytest
-coverage report
+# Run pytest unit tests (includes coverage by default)
+uv run pytest                            # Run tests with coverage
+uv run pytest -v                         # Verbose output with coverage
+uv run pytest --no-cov                   # Run tests without coverage
+
+# Coverage testing with different options
+uv run pytest --cov --cov-report=xml     # Generate XML coverage report
+uv run pytest --cov --cov-report=html    # Generate HTML coverage report
+uv run pytest --cov --cov-report=term    # Terminal coverage report only
+
+# Run comprehensive test suite
+uv run python run_tests.py
 ```
 
 ### Building and Running
@@ -82,6 +91,8 @@ Kanban workflow: 📋 ToDo → 🔄 Doing → 👀 Review → 🧪 Testing → �
 - **ruff** - Modern Python linter and formatter (dev dependency)
 - **coverage** - Test coverage reporting (dev dependency)
 - **parameterized** - Test parameterization support (dev dependency)
+- **pytest** - Testing framework (dev dependency)
+- **pytest-mock** - Mock support for pytest (dev dependency)
 
 ## Development Notes
 
@@ -90,3 +101,5 @@ Kanban workflow: 📋 ToDo → 🔄 Doing → 👀 Review → 🧪 Testing → �
 - Uses `ruff` for both linting and formatting (replaces black/flake8)
 - GitHub CLI (`gh`) is required for GitHub operations
 - See `examples/usage_example.py` for comprehensive usage examples
+- Run `python run_tests.py` for comprehensive test suite execution
+- Test coverage: 82% with 50 passing unit tests (using pytest-cov)
