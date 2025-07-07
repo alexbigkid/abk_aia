@@ -1,6 +1,6 @@
 [project]
 name = "abk_aia"
-version = "0.1.0"
+version = "0.2.0"
 description = "ABK AI assistant interface"
 readme = "README.md"
 requires-python = ">=3.13"
