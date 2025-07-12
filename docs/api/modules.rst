@@ -1,10 +1,10 @@
 API Reference
 =============
 
-ABK AIA Package
+AIA Package
 ---------------
 
-.. automodule:: abk_aia
+.. automodule:: aia
    :members:
    :undoc-members:
    :show-inheritance:

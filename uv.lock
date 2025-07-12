@@ -3,8 +3,8 @@ revision = 2
 requires-python = ">=3.13"
 
 [[package]]
-name = "abk-aia"
-version = "0.1.0"
+name = "aia"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "colorama" },

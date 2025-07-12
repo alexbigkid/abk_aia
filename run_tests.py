@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test runner script for ABK AIA project."""
+"""Test runner script for AIA project."""
 
 import subprocess
 import sys
@@ -23,7 +23,7 @@ def run_command(command, description):
 
 def main():
     """Run all tests and checks."""
-    print("🧪 ABK AIA Test Suite")
+    print("🧪 AIA Test Suite")
     print("=" * 20)
 
     commands = [

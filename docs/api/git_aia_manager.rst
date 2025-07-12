@@ -1,7 +1,7 @@
 Git AI Assistant Manager
 =======================
 
-.. automodule:: abk_aia.git_aia_manager
+.. automodule:: aia.git_aia_manager
    :members:
    :undoc-members:
    :show-inheritance:
@@ -11,7 +11,7 @@ The git_aia_manager module provides the core functionality for managing AI assis
 Base Classes
 ------------
 
-.. autoclass:: abk_aia.git_aia_manager.AiaManagerBase
+.. autoclass:: aia.git_aia_manager.AiaManagerBase
    :members:
    :undoc-members:
    :show-inheritance:
@@ -22,7 +22,7 @@ Provider Implementations
 GitHub Manager
 ~~~~~~~~~~~~~~
 
-.. autoclass:: abk_aia.git_aia_manager.GitHubAiaManager
+.. autoclass:: aia.git_aia_manager.GitHubAiaManager
    :members:
    :undoc-members:
    :show-inheritance:
@@ -30,7 +30,7 @@ GitHub Manager
 GitLab Manager
 ~~~~~~~~~~~~~~
 
-.. autoclass:: abk_aia.git_aia_manager.GitLabAiaManager
+.. autoclass:: aia.git_aia_manager.GitLabAiaManager
    :members:
    :undoc-members:
    :show-inheritance:
@@ -38,7 +38,7 @@ GitLab Manager
 Bitbucket Manager
 ~~~~~~~~~~~~~~~~~
 
-.. autoclass:: abk_aia.git_aia_manager.BitbucketAiaManager
+.. autoclass:: aia.git_aia_manager.BitbucketAiaManager
    :members:
    :undoc-members:
    :show-inheritance:
@@ -46,7 +46,7 @@ Bitbucket Manager
 Factory
 -------
 
-.. autoclass:: abk_aia.git_aia_manager.AiaManagerFactory
+.. autoclass:: aia.git_aia_manager.AiaManagerFactory
    :members:
    :undoc-members:
    :show-inheritance:
@@ -57,7 +57,7 @@ Enumerations
 Branch Types
 ~~~~~~~~~~~~
 
-.. autoclass:: abk_aia.git_aia_manager.GitBranchType
+.. autoclass:: aia.git_aia_manager.GitBranchType
    :members:
    :undoc-members:
    :show-inheritance:
@@ -65,7 +65,7 @@ Branch Types
 AI Assistant Types
 ~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: abk_aia.git_aia_manager.AiaType
+.. autoclass:: aia.git_aia_manager.AiaType
    :members:
    :undoc-members:
    :show-inheritance:

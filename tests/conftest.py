@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import Mock
 
-from abk_aia.models import Issue, WorkflowConfig, WorkflowStatus, IssueState
+from aia.models import Issue, WorkflowConfig, WorkflowStatus, IssueState
 
 
 @pytest.fixture

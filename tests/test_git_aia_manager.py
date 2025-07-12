@@ -5,8 +5,8 @@ from unittest.mock import Mock, patch
 import json
 import subprocess
 
-from abk_aia.git_aia_manager import GitBranchType, AiaType, AiaManagerBase, GitHubAiaManager, AiaManagerFactory
-from abk_aia.models import Issue, WorkflowStatus, GitOperation, IssueState, WorkflowConfig
+from aia.git_aia_manager import GitBranchType, AiaType, AiaManagerBase, GitHubAiaManager, AiaManagerFactory
+from aia.models import Issue, WorkflowStatus, GitOperation, IssueState, WorkflowConfig
 
 
 class TestGitBranchType:
@@ -184,7 +184,7 @@ class TestAiaManagerBase:
 class TestGitHubAiaManager:
     """Test GitHubAiaManager implementation."""
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_issues_success(self, mock_run, sample_config):
         """Test successful get_issues call."""
         # Mock successful subprocess response
@@ -213,7 +213,7 @@ class TestGitHubAiaManager:
         assert issues[0].number == 123
         assert issues[0].title == "Test issue"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_issues_failure(self, mock_run, sample_config):
         """Test get_issues with subprocess failure."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="Error")
@@ -223,7 +223,7 @@ class TestGitHubAiaManager:
 
         assert issues == []
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_issue_success(self, mock_run, sample_config):
         """Test successful get_issue call."""
         mock_result = Mock()
@@ -249,7 +249,7 @@ class TestGitHubAiaManager:
         assert issue.number == 123
         assert issue.title == "Test issue"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_update_issue_status_success(self, mock_run, sample_config, sample_issue):
         """Test successful issue status update."""
         mock_result = Mock()
@@ -261,7 +261,7 @@ class TestGitHubAiaManager:
         assert result.success is True
         assert "Updated issue 123 status" in result.message
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_add_label_success(self, mock_run, sample_config, sample_issue):
         """Test successful label addition."""
         mock_result = Mock()
@@ -273,7 +273,7 @@ class TestGitHubAiaManager:
         assert result.success is True
         assert "Added label 'priority:high'" in result.message
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_branch_success(self, mock_run, sample_config, sample_issue):
         """Test successful branch creation."""
         mock_result = Mock()
@@ -286,7 +286,7 @@ class TestGitHubAiaManager:
         assert "Created branch" in result.message
         assert result.output == "F/123/test-issue-title"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_commit_success(self, mock_run, sample_config):
         """Test successful commit creation."""
         mock_result = Mock()
@@ -312,7 +312,7 @@ class TestGitHubAiaManager:
         commit_call = mock_run.call_args_list[2]
         assert commit_call[0][0] == ["git", "commit", "-m", "Add new features"]
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_commit_single_file(self, mock_run, sample_config):
         """Test commit creation with single file."""
         mock_result = Mock()
@@ -329,7 +329,7 @@ class TestGitHubAiaManager:
         # Should call git add once, then git commit
         assert mock_run.call_count == 2
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_commit_add_file_error(self, mock_run, sample_config):
         """Test create_commit when git add fails."""
         # First git add call fails
@@ -342,7 +342,7 @@ class TestGitHubAiaManager:
         assert "Error creating commit" in result.message
         assert result.error == "File not found"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_commit_commit_error(self, mock_run, sample_config):
         """Test create_commit when git commit fails."""
 
@@ -364,7 +364,7 @@ class TestGitHubAiaManager:
         assert "Error creating commit" in result.message
         assert result.error == "Nothing to commit"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_assign_to_ai(self, mock_run, sample_config):
         """Test AI assignment with label management."""
         from datetime import datetime
@@ -392,7 +392,7 @@ class TestGitHubAiaManager:
         assert mock_run.call_count == 2
         assert result.success is True
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_assigned_issues_success(self, mock_run, sample_config):
         """Test getting issues assigned to specific AI type."""
         # Mock successful subprocess response with mixed assignments
@@ -444,7 +444,7 @@ class TestGitHubAiaManager:
         assert assigned_issues[0].number == 123
         assert assigned_issues[0].title == "Assigned to ai-coder"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_assigned_issues_none_assigned(self, mock_run, sample_config):
         """Test getting assigned issues when none are assigned to this AI type."""
         mock_result = Mock()
@@ -470,7 +470,7 @@ class TestGitHubAiaManager:
 
         assert len(assigned_issues) == 0
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_get_assigned_issues_failure(self, mock_run, sample_config):
         """Test get_assigned_issues when get_issues fails."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="API Error")
@@ -510,7 +510,7 @@ class TestAiaManagerFactory:
 class TestGitHubAiaManagerErrorHandling:
     """Test error handling in GitHubAiaManager."""
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_update_issue_status_no_project_number(self, mock_run, sample_issue):
         """Test update_issue_status when no project number configured."""
         config = WorkflowConfig(repo_owner="test", repo_name="repo")  # No project_number
@@ -522,7 +522,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "No project number configured" in result.message
         mock_run.assert_not_called()
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_update_issue_status_subprocess_error(self, mock_run, sample_config, sample_issue):
         """Test update_issue_status with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="API Error")
@@ -534,7 +534,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error updating issue status" in result.message
         assert result.error == "API Error"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_add_label_subprocess_error(self, mock_run, sample_config, sample_issue):
         """Test add_label_to_issue with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="Label error")
@@ -546,7 +546,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error adding label" in result.message
         assert result.error == "Label error"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_remove_label_subprocess_error(self, mock_run, sample_config, sample_issue):
         """Test remove_label_from_issue with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="Remove error")
@@ -558,7 +558,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error removing label" in result.message
         assert result.error == "Remove error"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_branch_subprocess_error(self, mock_run, sample_config, sample_issue):
         """Test create_branch with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "git", stderr="Branch exists")
@@ -570,7 +570,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error creating branch" in result.message
         assert result.error == "Branch exists"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_commit_subprocess_error(self, mock_run, sample_config):
         """Test create_commit with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "git", stderr="Commit failed")
@@ -582,7 +582,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error creating commit" in result.message
         assert result.error == "Commit failed"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_push_commit_subprocess_error(self, mock_run, sample_config):
         """Test push_commit with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "git", stderr="Push failed")
@@ -594,7 +594,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error pushing branch" in result.message
         assert result.error == "Push failed"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_create_pr_subprocess_error(self, mock_run, sample_config):
         """Test create_pr with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="PR failed")
@@ -606,7 +606,7 @@ class TestGitHubAiaManagerErrorHandling:
         assert "Error creating PR" in result.message
         assert result.error == "PR failed"
 
-    @patch("abk_aia.git_aia_manager.subprocess.run")
+    @patch("aia.git_aia_manager.subprocess.run")
     def test_comment_on_pr_subprocess_error(self, mock_run, sample_config):
         """Test comment_on_pr with subprocess error."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="Comment failed")
@@ -624,7 +624,7 @@ class TestPlaceholderManagerMethods:
 
     def test_gitlab_manager_methods(self, sample_config):
         """Test GitLab manager placeholder methods."""
-        from abk_aia.git_aia_manager import GitLabAiaManager
+        from aia.git_aia_manager import GitLabAiaManager
 
         manager = GitLabAiaManager(AiaType.AI_CODER, sample_config)
 
@@ -639,7 +639,7 @@ class TestPlaceholderManagerMethods:
 
     def test_bitbucket_manager_methods(self, sample_config):
         """Test Bitbucket manager placeholder methods."""
-        from abk_aia.git_aia_manager import BitbucketAiaManager
+        from aia.git_aia_manager import BitbucketAiaManager
 
         manager = BitbucketAiaManager(AiaType.AI_CODER, sample_config)
 

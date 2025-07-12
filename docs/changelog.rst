@@ -15,7 +15,7 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Added
 ^^^^^
 
-- Initial release of ABK AIA (AI Assistant Git Workflow Interface)
+- Initial release of AIA (AI Assistant Git Workflow Interface)
 - **Multi-provider support**: GitHub implementation (GitLab and Bitbucket placeholders)
 - **Standardized branch naming**: [B|D|F|R|T] + / + issue number + / + short name convention
 - **AI assistant coordination**: Support for ai-coder, ai-reviewer, ai-tester, ai-researcher, ai-marketeer
@@ -36,7 +36,7 @@ Technical Details
 ^^^^^^^^^^^^^^^^^^
 
 - **Python 3.13+ support**: Built with modern Python features
-- **GitHub CLI dependency**: Uses gh CLI for all GitHub operations  
+- **GitHub CLI dependency**: Uses gh CLI for all GitHub operations
 - **Set intersection optimization**: Efficient label matching using set operations
 - **Strategy pattern**: Extensible architecture for multiple Git providers
 - **Comprehensive error handling**: Detailed error reporting and validation
@@ -54,7 +54,7 @@ Development Dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 - **ruff**: Code linting and formatting
-- **coverage**: Test coverage reporting  
+- **coverage**: Test coverage reporting
 - **parameterized**: Parameterized test support
 - **sphinx**: Documentation generation
 - **sphinx-rtd-theme**: Read the Docs theme for documentation

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from abk_aia.models import Issue, IssueState, WorkflowConfig, WorkflowStatus, GitOperation, PullRequest, PullRequestState
+from aia.models import Issue, IssueState, WorkflowConfig, WorkflowStatus, GitOperation, PullRequest, PullRequestState
 
 
 class TestIssue:

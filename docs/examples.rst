@@ -1,14 +1,14 @@
 Examples
 ========
 
-This page provides comprehensive examples of using the ABK AIA workflow system.
+This page provides comprehensive examples of using the AIA workflow system.
 
 Basic Setup
 -----------
 
 .. code-block:: python
 
-   from abk_aia import WorkflowCoordinator, WorkflowConfig, AiaType, WorkflowStatus
+   from aia import WorkflowCoordinator, WorkflowConfig, AiaType, WorkflowStatus
 
    # Configure your GitHub repository
    config = WorkflowConfig(
@@ -34,7 +34,7 @@ Complete Workflow Example
    if todo_issues:
        issue_number = todo_issues[0].number
        result = coordinator.start_coder_workflow(issue_number)
-       
+
        if result.success:
            print(f"✓ Started coder workflow for issue #{issue_number}")
            print(f"Created branch: {result.output}")
@@ -47,7 +47,7 @@ Complete Workflow Example
        print("✓ Moved to review stage, assigned to ai-reviewer")
 
    # 4. Complete reviewer workflow and move to tester
-   result = coordinator.complete_reviewer_workflow(issue_number)  
+   result = coordinator.complete_reviewer_workflow(issue_number)
    if result.success:
        print("✓ Moved to testing stage, assigned to ai-tester")
 
@@ -101,13 +101,13 @@ Workflow Status Overview
 
    # Get overview of all issues by status
    status_counts = coordinator.get_workflow_status()
-   
+
    for status, count in status_counts.items():
        print(f"{status.value}: {count} issues")
 
    # Example output:
    # 📋 ToDo: 5 issues
-   # 🔄 Doing: 2 issues  
+   # 🔄 Doing: 2 issues
    # 👀 Review: 1 issues
    # 🧪 Testing: 1 issues
    # ✅ Done: 12 issues
@@ -119,7 +119,7 @@ For more granular control, you can work with individual AI managers:
 
 .. code-block:: python
 
-   from abk_aia import AiaManagerFactory, AiaType
+   from aia import AiaManagerFactory, AiaType
 
    # Create a specific manager
    coder_manager = AiaManagerFactory.create_manager("github", AiaType.AI_CODER, config)
@@ -150,7 +150,7 @@ All operations return GitOperation objects with success/failure information:
 .. code-block:: python
 
    result = coordinator.start_coder_workflow(issue_number=999)
-   
+
    if result.success:
        print(f"Success: {result.message}")
        if result.output:
@@ -170,7 +170,7 @@ The system automatically generates standardized branch names:
    # For a bug issue #123 titled "Fix user login error"
    # Generated branch: B/123/fix-user-login-error
 
-   # For a feature issue #456 titled "Add user profile dashboard"  
+   # For a feature issue #456 titled "Add user profile dashboard"
    # Generated branch: F/456/add-user-profile-dashboard
 
    # For a documentation issue #789 titled "Update API documentation"
@@ -191,7 +191,7 @@ Different configuration options:
 
    # Full configuration with project board
    config = WorkflowConfig(
-       repo_owner="username", 
+       repo_owner="username",
        repo_name="repository",
        project_number=1,
        default_base_branch="develop"  # Use develop instead of main

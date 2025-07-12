@@ -1,16 +1,16 @@
 #!/bin/bash
-# Build documentation script for ABK AIA
+# Build documentation script for AIA
 
-echo "🔧 Building ABK AIA Documentation..."
+echo "🔧 Building AIA Documentation..."
 echo "======================================"
 
 # Clean previous build
 echo "Cleaning previous build..."
 rm -rf _build/
 
-# Build HTML documentation  
+# Build HTML documentation
 echo "Building HTML documentation..."
-uv run sphinx-build -b html /Users/abk/dev/git/abk_aia/docs /Users/abk/dev/git/abk_aia/docs/_build/html
+uv run sphinx-build -b html /Users/abk/dev/git/aia/docs /Users/abk/dev/git/aia/docs/_build/html
 
 if [ $? -eq 0 ]; then
     echo ""

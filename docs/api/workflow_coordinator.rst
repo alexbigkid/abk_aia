@@ -1,7 +1,7 @@
 Workflow Coordinator
 ===================
 
-.. automodule:: abk_aia.workflow_coordinator
+.. automodule:: aia.workflow_coordinator
    :members:
    :undoc-members:
    :show-inheritance:
@@ -11,7 +11,7 @@ The WorkflowCoordinator class manages the complete AI assistant workflow from is
 Key Methods
 -----------
 
-.. autoclass:: abk_aia.workflow_coordinator.WorkflowCoordinator
+.. autoclass:: aia.workflow_coordinator.WorkflowCoordinator
    :members:
    :undoc-members:
    :show-inheritance:

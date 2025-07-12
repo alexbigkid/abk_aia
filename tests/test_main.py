@@ -1,23 +1,22 @@
 """Unit tests for main module entry point."""
 
 from unittest.mock import patch
-from io import StringIO
 
-from abk_aia import main
+from aia import main
 
 
 class TestMain:
     """Test main entry point."""
 
-    @patch("sys.stdout", new_callable=StringIO)
-    def test_main_function(self, mock_stdout):
-        """Test main function prints expected output."""
+    @patch("aia.cli.AiaCLI.run")
+    def test_main_function(self, mock_cli_run):
+        """Test main function calls CLI."""
         main()
+        mock_cli_run.assert_called_once()
 
-        output = mock_stdout.getvalue()
-        assert "ABK AI Assistant Interface" in output
-        assert "Key features:" in output
-        assert "Standardized branch naming" in output
-        assert "GitHub CLI integration" in output
-        assert "examples/usage_example.py" in output
-        assert "CLAUDE.md" in output
+    @patch("sys.argv", ["aia", "--help"])
+    @patch("aia.cli.AiaCLI.run")
+    def test_main_with_help(self, mock_cli_run):
+        """Test main function with help argument."""
+        main()
+        mock_cli_run.assert_called_once()

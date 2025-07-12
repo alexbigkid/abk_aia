@@ -2,13 +2,13 @@
 
 from unittest.mock import Mock, patch
 
-from abk_aia.abk_common import function_trace, PerformanceTimer
+from aia.abk_common import function_trace, PerformanceTimer
 
 
 class TestFunctionTrace:
     """Test function_trace decorator."""
 
-    @patch("abk_aia.abk_common.logging.getLogger")
+    @patch("aia.abk_common.logging.getLogger")
     def test_function_trace_decorator(self, mock_get_logger):
         """Test function_trace decorator functionality."""
         mock_logger = Mock()
@@ -34,7 +34,7 @@ class TestPerformanceTimer:
 
     def test_performance_timer_with_default_logger(self):
         """Test PerformanceTimer with default logger."""
-        with patch("abk_aia.abk_common.logging.getLogger") as mock_get_logger:
+        with patch("aia.abk_common.logging.getLogger") as mock_get_logger:
             mock_logger = Mock()
             mock_get_logger.return_value = mock_logger
 
@@ -54,7 +54,7 @@ class TestPerformanceTimer:
         """Test PerformanceTimer as context manager."""
         mock_logger = Mock()
 
-        with patch("abk_aia.abk_common.timeit.default_timer", side_effect=[1.0, 1.1]), PerformanceTimer("test_operation", mock_logger):
+        with patch("aia.abk_common.timeit.default_timer", side_effect=[1.0, 1.1]), PerformanceTimer("test_operation", mock_logger):
             # Simulate some work
             pass
 
@@ -69,7 +69,7 @@ class TestPerformanceTimer:
         mock_logger = Mock()
 
         # Mock timer to return specific values
-        with patch("abk_aia.abk_common.timeit.default_timer", side_effect=[1.0, 1.05]), PerformanceTimer("test_operation", mock_logger):
+        with patch("aia.abk_common.timeit.default_timer", side_effect=[1.0, 1.05]), PerformanceTimer("test_operation", mock_logger):
             pass
 
         # Should log 50ms (0.05 seconds * 1000)

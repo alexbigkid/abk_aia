@@ -13,8 +13,8 @@ import subprocess
 # Third party imports
 
 # Local imports
-from abk_aia import abk_common
-from abk_aia.models import Issue, WorkflowConfig, GitOperation, WorkflowStatus
+from aia import abk_common
+from aia.models import Issue, WorkflowConfig, GitOperation, WorkflowStatus
 
 
 # -----------------------------------------------------------------------------
@@ -391,6 +391,83 @@ class GitHubAiaManager(AiaManagerBase):
                 assigned_issues.append(issue)
 
         return assigned_issues
+
+    @abk_common.function_trace
+    def get_issues_in_column(self, column_status: WorkflowStatus) -> list[Issue]:
+        """Get issues from a specific project board column."""
+        return self.get_issues(status=column_status)
+
+    @abk_common.function_trace
+    def get_top_priority_todo_issue(self) -> Issue | None:
+        """Get the highest priority issue from ToDo column.
+
+        Returns:
+            The first issue from ToDo column (assuming GitHub orders by priority)
+        """
+        todo_issues = self.get_issues_in_column(WorkflowStatus.TODO)
+        if todo_issues:
+            return todo_issues[0]  # First issue is highest priority
+        return None
+
+    @abk_common.function_trace
+    def move_issue_to_column(self, issue: Issue, target_column: WorkflowStatus) -> GitOperation:
+        """Move issue to a specific project board column.
+
+        Args:
+            issue: Issue to move
+            target_column: Target column status
+
+        Returns:
+            GitOperation result
+        """
+        return self.update_issue_status(issue, target_column)
+
+    @abk_common.function_trace
+    def get_project_board_info(self) -> dict:
+        """Get project board information including all columns and issue counts."""
+        try:
+            if not self.config.project_number:
+                return {"error": "No project number configured"}
+
+            # Get all issues and group by status
+            all_issues = self.get_issues()
+            column_counts = {}
+
+            for status in WorkflowStatus:
+                column_issues = [issue for issue in all_issues if issue.project_status == status]
+                column_counts[status.value] = {
+                    "count": len(column_issues),
+                    "issues": [{"number": issue.number, "title": issue.title} for issue in column_issues],
+                }
+
+            return {
+                "project_number": self.config.project_number,
+                "repo": self.config.repo_full_name,
+                "columns": column_counts,
+                "total_issues": len(all_issues),
+            }
+        except Exception as e:
+            return {"error": f"Failed to get project board info: {str(e)}"}
+
+    @abk_common.function_trace
+    def validate_project_board_setup(self) -> GitOperation:
+        """Validate that the project board is properly configured."""
+        try:
+            if not self.config.project_number:
+                return GitOperation(success=False, message="No project number configured in WorkflowConfig")
+
+            # Test project board access
+            cmd = ["gh", "project", "view", str(self.config.project_number), "--format", "json"]
+
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            project_data = json.loads(result.stdout)
+
+            return GitOperation(
+                success=True, message=f"Project board validated: {project_data.get('title', 'Unknown')}", output=result.stdout
+            )
+
+        except subprocess.CalledProcessError as e:
+            return GitOperation(success=False, message=f"Project board validation failed: {e.stderr}", error=e.stderr)
 
     def _parse_issue_data(self, issue_data: dict) -> Issue:
         """Parse GitHub issue data into Issue object."""

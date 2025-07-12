@@ -19,9 +19,10 @@ class IssueState(Enum):
 class WorkflowStatus(Enum):
     """Kanban workflow status enumeration.
 
-    Defines the workflow states: ToDo → Doing → Review → Testing → Done
+    Defines the workflow states: Triage → ToDo → Doing → Review → Testing → Done
     """
 
+    TRIAGE = "🔍 Triage"
     TODO = "📋 ToDo"
     DOING = "🔄 Doing"
     REVIEW = "👀 Review"

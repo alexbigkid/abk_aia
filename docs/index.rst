@@ -1,4 +1,4 @@
-ABK AIA Documentation
+AIA Documentation
 =====================
 
 Welcome to the AI Assistant Git Workflow Interface documentation.
@@ -10,7 +10,7 @@ Welcome to the AI Assistant Git Workflow Interface documentation.
 .. image:: https://img.shields.io/badge/license-MIT-green.svg
    :alt: License
 
-ABK AIA provides a standardized interface for AI assistant collaboration with Git repositories. It supports structured workflows and multi-provider Git integration.
+AIA provides a standardized interface for AI assistant collaboration with Git repositories. It supports structured workflows and multi-provider Git integration.
 
 Features
 --------
@@ -32,12 +32,12 @@ Quick Start
 
 .. code-block:: python
 
-   from abk_aia import WorkflowCoordinator, WorkflowConfig
+   from aia import WorkflowCoordinator, WorkflowConfig
 
    # Configure your repository
    config = WorkflowConfig(
        repo_owner="your-username",
-       repo_name="your-repo", 
+       repo_name="your-repo",
        project_number=1
    )
 
@@ -56,13 +56,13 @@ Install using uv (recommended):
 
 .. code-block:: bash
 
-   uv add abk-aia
+   uv add aia
 
 Or using pip:
 
 .. code-block:: bash
 
-   pip install abk-aia
+   pip install aia
 
 Requirements
 ~~~~~~~~~~~~
@@ -80,7 +80,7 @@ API Reference
 
    api/modules
    api/workflow_coordinator
-   api/git_aia_manager  
+   api/git_aia_manager
    api/models
    examples
    changelog
@@ -92,9 +92,9 @@ Core Components
    :toctree: api/
    :template: module.rst
 
-   abk_aia.workflow_coordinator
-   abk_aia.git_aia_manager
-   abk_aia.models
+   aia.workflow_coordinator
+   aia.git_aia_manager
+   aia.models
 
 Workflow Examples
 -----------------
@@ -110,7 +110,7 @@ Workflow Examples
 
 .. code-block:: python
 
-   # Move to Review, assign to ai-reviewer  
+   # Move to Review, assign to ai-reviewer
    result = coordinator.complete_coder_workflow(issue_number=123)
 
 **Creating a pull request:**

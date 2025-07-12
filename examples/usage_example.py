@@ -1,9 +1,9 @@
 """Example usage of the AI assistant workflow interface."""
 
 import logging
-from abk_aia.workflow_coordinator import WorkflowCoordinator
-from abk_aia.models import WorkflowConfig, WorkflowStatus
-from abk_aia.git_aia_manager import AiaType
+from aia.workflow_coordinator import WorkflowCoordinator
+from aia.models import WorkflowConfig, WorkflowStatus
+from aia.git_aia_manager import AiaType
 
 
 def setup_logging():

@@ -1,1 +1,1 @@
-"""Test package for ABK AIA."""
+"""Test package for AIA."""
